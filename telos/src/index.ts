@@ -1,7 +1,7 @@
 // alt1 base libs, provides all the commonly used methods for image matching and capture
 // also gives your editor info about the window.alt1 api
-import * as A1lib from "@alt1/base";
-import * as ChatboxReader from "@alt1/chatbox";
+import * as A1lib from "alt1/base";
+import ChatboxReader from "alt1/chatbox";
 
 import { TelosReader } from "./TelosReader";
 import { _timer } from "./timer.js";
@@ -10,8 +10,8 @@ import { telosInterface } from "./interface.js";
 import * as $ from "./jquery";
 
 // tell webpack to add index.html and appconfig.json to output
-require("!file-loader?name=[name].[ext]!./index.html");
-require("!file-loader?name=[name].[ext]!./appconfig.json");
+require("./index.html");
+require("./appconfig.json");
 
 
 let attack_messages = {
@@ -170,7 +170,7 @@ function compare(str1: string, str2: string) {
 	return isMatch;
 }
 
-let reader = new ChatboxReader.default();
+let reader = new ChatboxReader();
 reader.readargs = {
     colors: [
         A1lib.mixColor(255,255,255),    // White (Timestamp)

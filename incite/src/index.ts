@@ -13,6 +13,7 @@ let imgs = A1lib.ImageDetect.webpackImages(
     {
         "incite_red": require("./images/incite_red.data.png"),
         "incite_red_cropped": require("./images/incite_red_cropped.data.png"),
+        "ee": require("./images/ee.data.png"),
 	}
 );
 

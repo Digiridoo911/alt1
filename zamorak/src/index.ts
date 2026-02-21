@@ -1,7 +1,7 @@
 //alt1 base libs, provides all the commonly used methods for image matching and capture
 //also gives your editor info about the window.alt1 api
 import * as A1lib from "@alt1/base";
-import * as ChatboxReader from "@alt1/chatbox";
+import * as ChatboxReader from "alt1/chatbox";
 
 import * as $ from "./jquery";
 

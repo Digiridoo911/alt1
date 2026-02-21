@@ -1,22 +1,45 @@
-import alt1chain from "@alt1/webpack";
-import * as path from "path";
+const path = require("path");
 
-var srcdir = path.resolve(__dirname, "./src/");
-var outdir = path.resolve(__dirname, "./dist/");
-
-//wrapper around webpack-chain, most stuff you'll need are direct properties,
-//more finetuning can be done at config.chain
-//the wrapper gives decent webpack defaults for everything alt1/typescript/react related
-var config = new alt1chain(srcdir, { ugly: false });
-
-//exposes all root level exports as UMD (as named package "testpackege" or "TEST" in global scope)
-config.makeUmd("testpackage", "TEST");
-
-//the name and location of our entry file (the name is used for output and can contain a relative path)
-config.entry("index", "./index.ts");
-
-//where to put all the stuff
-config.output(outdir);
-
-
-export default config.toConfig();
+/**
+ * @type {import("webpack").Configuration}
+ */
+module.exports = {
+    //tell webpack where to look for source files
+    context: path.resolve(__dirname, "src"),
+    entry: {
+        //each entrypoint results in an output file
+        //so this results in an output file called 'main.js' which is built from src/index.ts
+        "index": "./index.ts"
+    },
+    output: {
+        path: path.resolve(__dirname, "dist"),
+        // library means that the exports from the entry file can be accessed from outside, in this case from the global scope as window.TestApp
+        library: { type: "umd", name: "TestApp" },
+        filename: "index_bundle.js",
+    },
+    devtool: false,
+    mode: "development",
+    // prevent webpack from bundling these imports (alt1 libs can use them when running in nodejs)
+    externals: [
+        "sharp",
+        "canvas",
+        "electron/common"
+    ],
+    resolve: {
+        extensions: [".wasm", ".tsx", ".ts", ".mjs", ".jsx", ".js"]
+    },
+    module: {
+        // The rules section tells webpack what to do with different file types when you import them from js/ts
+        rules: [
+            { test: /\.tsx?$/, loader: "ts-loader" },
+            { test: /\.css$/, use: ["style-loader", "css-loader"] },
+            { test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] },
+            // type:"asset" means that webpack copies the file and gives you an url to them when you import them from js
+            { test: /\.(png|jpg|jpeg|gif|webp)$/, type: "asset/resource", generator: { filename: "[base]" } },
+            { test: /\.(html|json)$/, exclude: /\.fontmeta\.json$/, type: "asset/resource", generator: { filename: "[base]" } },
+            // file types useful for writing alt1 apps, make sure these two loader come after any other json or png loaders, otherwise they will be ignored
+            { test: /\.data\.png$/, loader: "alt1/imagedata-loader", type: "javascript/auto" },
+            { test: /\.fontmeta.json/, loader: "alt1/font-loader" }
+        ]
+    },
+}

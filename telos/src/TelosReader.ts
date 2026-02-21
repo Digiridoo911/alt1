@@ -1,4 +1,4 @@
-import * as A1lib from "@alt1/base";
+import * as A1lib from "alt1/base";
 
 
 var imgs = A1lib.ImageDetect.webpackImages(
